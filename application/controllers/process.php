@@ -241,10 +241,25 @@ class Process extends CI_Controller {
 			redirect(base_url('/process/foods'));
 		} else if  ($this->input->post('action') == "Delete From Foods List")
 		{
-			//echo "Delete From Foods<br>";
 			$this->load->model('Food_model');
 			$this->modelData['foods'] = $this->input->post('allFoods');
-			$this->Food_model->delete_foods($this->modelData['foods']);
+			$result = $this->Food_model->delete_foods($this->modelData['foods']);
+
+			$deletedFoods = "Foods Deleted: ";
+			foreach ($result['deleted'] as $food)
+			{
+				$deletedFoods = $deletedFoods . "<br>" . $food;
+			}
+
+			$notDeletedFoods = "Foods Not Deleted: ";
+			foreach ($result['not_deleted'] as $food)
+			{
+				$notDeletedFoods = $notDeletedFoods . "<br>" . $food;
+			}
+
+			//echo "<br>" . $deletedFoods . "<br>";
+			//echo $notDeletedFoods . "<br>";
+
 			redirect(base_url('/process/foods'));
 		} else if  ($this->input->post('action') == "Delete From My Foods List")
 		{

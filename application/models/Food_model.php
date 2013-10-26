@@ -210,26 +210,41 @@ class Food_model extends CI_Model
 		
 	public function delete_foods($foods)
 	{
-		// echo "In delete_foods";
-		// echo "<pre>";
-		// var_dump($foods);
-		// echo "</pre>";
-		$setWhere = false;
+		// for each food to be deleted from Foods List
 		foreach ($foods as $food)
 		{
-		// echo "<pre>";
-		// var_dump($food);
-		// echo "</pre>";
-			if (!$setWhere) 
+			// is this food being used in food journal
+			$query = $this->db->query(
+				"select ipm.food_id, ipm.id
+				from itemsPerMeal ipm
+				join foods on ipm.food_id = foods.id
+				where foods.name = '{$food}';"
+				);
+
+			if ($query->num_rows() == 0)
 			{
-				$setWhere = true;
+				// food is not being used in journal;
+				// delete food from My Foods list if it is in the list
+				//    so that the food can then be deleted from the Foods List
+				$query = $this->db->query(
+					"delete userFoods
+					from userFoods
+					join foods on foods.id = userFoods.food_id
+					where foods.name = '{$food}';"
+					);
+
+				// delete food from Foods List
 				$this->db->where('name', $food);
+				$query = $this->db->delete('foods');
+				$result['deleted'][] = $food;
 			} else
 			{
-				$this->db->or_where('name', $food);
+				// food is being used in Food Journal and therefore
+				//     can not be deleted from Foods List
+				$result['not_deleted'][] = $food;
 			}
 		}
-		$this->db->delete('foods');
+		return $result;
 	}
 
 	public function delete_myFoods($foods)

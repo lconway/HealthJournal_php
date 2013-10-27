@@ -99,6 +99,12 @@ class Process extends CI_Controller {
 			//echo "date is not set<br>";
 			$this->session->set_userdata('journal_date', date('Y-m-d H:i:s', time()));
 			//echo "date is set to " . $this->session->userdata('journal_date');
+
+			// new journal_date;  add userMeals entries for date
+			$this->load->model('Food_model');
+			$this->Food_model->set_userMeals();
+
+
 		} else
 		{
 			//echo "date is set to " . $this->session->userdata('journal_date');
@@ -107,24 +113,27 @@ class Process extends CI_Controller {
 
 
 		$this->load->model('Food_model');
-		$meals = $this->Food_model->get_meals();
+		$userMeals = $this->Food_model->get_userMeals();
 
-		$lenMeals = count($meals);
+		$lenMeals = count($userMeals);
 		for ($i = 0; $i < $lenMeals; $i++)
 		{
 			// add array of foods to each meal
-			$mealId = $meals[$i]['id'];
-			$meals[$i]['myFoods'] =  $this->Food_model->get_foods_by_date($mealId);
+			// *******************  this mealId is from meals table.  Need id from userMeals table.
+			$mealId = $userMeals[$i]['mealId'];
+			$userMealId = $userMeals[$i]['userMealId'];
+			//echo "userMealId = " . $userMealId . "  mealId = " . $mealId . "<br>";
+			$userMeals[$i]['myFoods'] =  $this->Food_model->get_foods_by_date($userMealId);
 		}
-		$viewData['meals'] = $meals;
-		// foreach ($meals as $meal)
-		// {
-		// 	echo "<br> meal is " . $meal['name'] . "<br>";
-		// 	foreach ($meal['myFoods'] as $food)
-		// 	{
-		// 		echo "food is " . $food['foodName'] . "<br>";
-		// 	}
-		// }
+		$viewData['userMeals'] = $userMeals;
+		foreach ($userMeals as $userMeal)
+		{
+			//echo "<br> meal is " . $userMeal['name'] . "<br>";
+			foreach ($userMeal['myFoods'] as $food)
+			{
+				//echo "food is " . $food['foodName'] . "<br>";
+			}
+		}
 
 		$this->load->view('journal', $viewData);
 	}
@@ -194,7 +203,11 @@ class Process extends CI_Controller {
 
 	public function foods($mealId = NULL)
 	{
-		$viewData['mealId'] = $this->input->post('mealId');
+		// echo "In foods<br>";
+		// echo "<pre>";
+		// var_dump($this->input->post());
+		// echo "</pre>";
+		$viewData['userMealId'] = $this->input->post('userMealId');
 		$this->load->model('Food_model');
 		$foods = $this->Food_model->get_foods();
 		$viewData['foods'] = $foods;
@@ -212,7 +225,7 @@ class Process extends CI_Controller {
 
 		if ($this->input->post('action') == "Add To Meal")
 		{
-			$mealId = $this->input->post('mealId');
+			$userMealId = $this->input->post('userMealId');
 			$this->load->model('Food_model');
 			if ($this->input->post('listType') == "allFoods")
 			{
@@ -224,7 +237,7 @@ class Process extends CI_Controller {
 			$this->modelData['mealInfo'] = array (
 				'foods' => $foods,
 				'listType' => $this->input->post('listType'),
-				'mealId' => $mealId
+				'userMealId' => $userMealId
 			);
 		// echo "<pre>";
 		// var_dump($this->modelData['mealInfo']);

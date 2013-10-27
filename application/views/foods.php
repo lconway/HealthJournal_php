@@ -9,23 +9,23 @@
     <script type="text/javascript">
         $(document).ready(function(){
             $('#allFoodsSelect').change(function() {
-                alert("Foods List selection");
+                //alert("Foods List selection");
                 var selectValue = $('#allFoodsSelect').val();
-                alert(selectValue);
+                //alert(selectValue);
                 var mealId = $('#mealId').val();
                 if (mealId >= 0)
                 {
-                    alert(mealId);
+                    //alert(mealId);
                 } else
                 {
-                    alert("no meal id");
+                    //alert("no meal id");
                 }
                 $('.foodListButton').prop('disabled',false);
                 $('.myFoodListButton').prop('disabled',true);
            });
 
             $('#myFoodsSelect').change(function() {
-                alert("MyFoods List selection");
+                //alert("MyFoods List selection");
                 $('.foodListButton').prop('disabled',true);
                 $('.myFoodListButton').prop('disabled',false);
             });
@@ -63,7 +63,7 @@
                 <input type=submit class="foodListButton" disabled name="action" value="Add To Meal"><br>
                 <input type=submit class="foodListButton" disabled name="action" value="Delete From Foods List"><br>
                 <input type=submit class="foodListButton" disabled name="action" value="Add To My Foods"><br>
-                <input type="hidden" id="mealId" name="mealId" value="<?=$mealId?>">
+                <input type="hidden" id="userMealId" name="userMealId" value="<?=$userMealId?>">
                 <input type="hidden" name="listType" value="allFoods">
             </form>   <!-- end of allFoodList-->
 
@@ -84,7 +84,7 @@
                 </br>
                 <input type=submit class="myFoodListButton" disabled name="action" value="Add To Meal"><br>
                 <input type=submit class="myFoodListButton" disabled name="action" value="Delete From My Foods List">
-                <input type="hidden" name="mealId" value="<?=$mealId?>">
+                <input type="hidden" name="userMealId" value="<?=$userMealId?>">
                <input type="hidden" name="listType" value="myFoods">
             </form>   <!-- end of myFoodList-->
         

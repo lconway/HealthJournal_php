@@ -48,19 +48,19 @@
 
 <?php
             //echo "user id is " . $this->session->userdata('user_id') . "<br>";
-            foreach($meals as $meal) {  
+            foreach($userMeals as $userMeal) {  
                 // echo "<pre>";
-                // var_dump($meal);
+                // var_dump($userMeal);
                 // echo "</pre>";
               
-                //echo "meal id is " . $meal['id . "<br>";
-                $this->session->set_userdata('meal_id', $meal['id']);
+                //echo "userMeal id is " . $userMeal['id'] . "<br>";
+                $this->session->set_userdata('meal_id', $userMeal['mealId']);
 ?>
-            <form id="thisForm<?=$meal['id']?>" class="mealForm" action="/process/foods" method="post">
-                <label><?=$meal['name']?></label>
+            <form id="thisForm<?=$userMeal['mealId']?>" class="mealForm" action="/process/foods" method="post">
+                <label><?=$userMeal['name']?></label>
                 <input type="submit" value="Add Food">
-                <input type="hidden" name="mealId" value="<?=$meal['id']?>">
-                <table id="<?=$meal['name']?>">
+                <input type="hidden" name="userMealId" value="<?=$userMeal['userMealId']?>">
+                <table id="<?=$userMeal['name']?>">
                     <thead>
                         <tr>
                             <th>Item</th>
@@ -74,7 +74,7 @@
                     <tbody>
 <?php
                     $row = 1;
-                    foreach($meal['myFoods'] as $food) {
+                    foreach($userMeal['myFoods'] as $food) {
                         $rowType = $row % 2 ? "oddRow" : "evenRow";
  ?>                      
                         <tr class = <?=$rowType?>>

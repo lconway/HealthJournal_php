@@ -63,7 +63,7 @@ class Food_model extends CI_Model
 				join measurements m on m.id = f.measurement_id
 				where u.id = '{$this->session->userdata('user_id')}' 
 				and um.day_and_time  like '{$date}' 
-				and um.meal_id = '{$meal_id}';"
+				and um.id = '{$meal_id}';"
 				);
 		//	and um.day_and_time  >= '2013-09-05 00:00:00' and um.day_and_time < '2013-09-06 00:00:00' 
 		// $rows = $query->result();
@@ -88,6 +88,49 @@ class Food_model extends CI_Model
 		$this->db->where('id', $food_id);
 		$this->db->select('name');
 		$this->db->get('foods');
+	}
+
+	public function get_userMeals()
+	{
+		$date = new DateTime($this->session->userdata('journal_date'));
+		$date = $date->format('Y-m-d') . "%";
+		$query = $this->db->query( 
+				"select meals.name, um.meal_id as mealId, um.id as userMealId
+				from meals
+				join userMeals um on um.meal_id = meals.id
+				where um.user_id = '{$this->session->userdata('user_id')}' 
+				and um.day_and_time  like '{$date}';" 
+				);
+
+		return $query->result_array();
+	}
+
+	public function set_userMeals()
+	{
+		//echo "In set_userMeals<br>";
+
+		$date = new DateTime($this->session->userdata('journal_date'));
+		$date = $date->format('Y-m-d');
+		$this->db->where('user_id', $this->session->userdata('user_id'));
+		$this->db->like('day_and_time', $date);
+		$this->db->select('id');
+		$query = $this->db->get('userMeals');
+
+		if ($query->num_rows() == 0)
+		{
+			//echo "userMeals not yet set";
+			$meals = $this->get_meals();
+			$lenMeals = count($meals);
+			for ($i = 0; $i < $lenMeals; $i++)
+			{
+				$data = array(
+					'user_id' => $this->session->userdata('user_id'),
+					'meal_id' => $meals[$i]['id'],
+					'day_and_time' => $this->session->userdata('journal_date')
+				);
+				$this->db->insert('userMeals', $data);
+			}
+		}
 	}
 
 	public function add_myFoods($foods)
@@ -152,37 +195,37 @@ class Food_model extends CI_Model
 			}
 			// If this meal for this user already exist in userMeals table,
 			//   don't recreate it.
-			$date = date('Y-m-d', time());
-			//echo "<br>date is " . $date . "<br>";
-			$this->db->where('user_id', $this->session->userdata('user_id'));
-			$this->db->where('meal_id', $mealInfo['mealId']);
-			$this->db->where('day_and_time', $date);
-			$this->db->select('id');
-			$query = NULL;
-			$query = $this->db->get('userMeals');
+			// $date = date('Y-m-d', time());
+			// //echo "<br>date is " . $date . "<br>";
+			// $this->db->where('user_id', $this->session->userdata('user_id'));
+			// $this->db->where('meal_id', $mealInfo['mealId']);
+			// $this->db->where('day_and_time', $date);
+			// $this->db->select('id');
+			// $query = NULL;
+			// $query = $this->db->get('userMeals');
 
-			if ($query->num_rows() <= 0) {  
-				// Add new user/meal record for userMeal table  
-				//echo "No rows is ok!";
-				$data = array(
-					'user_id' => $this->session->userdata('user_id'),
-					'meal_id' => $mealInfo['mealId'],
-					'day_and_time' => $date,
-					'created_at' => $date
-					);
-				$this->db->insert('userMeals', $data);
-				$userMeal_id = $this->db->insert_id();
-				//echo "<br>userMeal_id is " . $userMeal_id . "<br>";
-			} else
-			{
+			// if ($query->num_rows() <= 0) {  
+			// 	// Add new user/meal record for userMeal table  
+			// 	//echo "No rows is ok!";
+			// 	$data = array(
+			// 		'user_id' => $this->session->userdata('user_id'),
+			// 		'meal_id' => $mealInfo['mealId'],
+			// 		'day_and_time' => $date,
+			// 		'created_at' => $date
+			// 		);
+			// 	$this->db->insert('userMeals', $data);
+			// 	$userMeal_id = $this->db->insert_id();
+			// 	//echo "<br>userMeal_id is " . $userMeal_id . "<br>";
+			// } else
+			// {
 				// this meal for this user already exist in userMeal table
 				//echo "<br>user meal already exists!!<br>";
 // left off here
-				$userMeal_id = $mealInfo['mealId'];
+				$userMeal_id = $mealInfo['userMealId'];
 				$rows = $query->result();
 				//echo "<br>";
 				//echo "userMeal id is <br>" . $mealInfo['mealId'] . "<br>";
-			}
+			//}
 			// Add food for this meal to itemsPerMeal table
 				// $data = array(
 				// 	'user_id' => $this->session->userdata('user_id'),
@@ -202,7 +245,8 @@ class Food_model extends CI_Model
 				//'user_id' => $this->session->userdata('user_id'),
 				'food_id' => $foodId->id,
 				'userMeal_id' => $userMeal_id,
-				'created_at' => $date
+				'created_at' => date('Y-m-d', time())
+
 			);
 			$this->db->insert('itemsPerMeal', $data);
 		}

@@ -140,6 +140,9 @@
 	.mealForm thead {
 		background-color: #C1C1C1;
 	}
+	.mealForm tfoot {
+		background-color: #C1C1C1;
+	}
 	.mealForm .oddRow {
 		background-color: #EAEAEA;
 	}

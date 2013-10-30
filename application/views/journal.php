@@ -8,15 +8,30 @@
     <link href="<?=base_url()?>/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <script type="text/javascript" src="<?=base_url()?>/assets/jquery/jquery-1.10.2.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>   
+    <script type="text/javascript" src="<?=base_url()?>/assets/jquery/jquery.sumtr.js"></script>
     <script type="text/javascript">
 
     $(document).ready(function(){
 
+
+
+
+
+
         $('.datepicker').datepicker();
         // $('#dateForm').submit(function(){
         //     var dateValue = $('#journal_date').val();
+        //     $_SESSION['journal_date'] = dateValue;
 
-        // });
+        //     return false;
+        //  });
+
+        $('table.mealTable').each(function(){
+            // var tableName = $(this).attr("id");
+            // alert(tableName);
+            $(this).sumtr();
+        });
+
 
     });
     </script>
@@ -60,7 +75,7 @@
                 <label><?=$userMeal['name']?></label>
                 <input type="submit" value="Add Food">
                 <input type="hidden" name="userMealId" value="<?=$userMeal['userMealId']?>">
-                <table id="<?=$userMeal['name']?>">
+                <table id="<?=$userMeal['name']?>" class="mealTable">
                     <thead>
                         <tr>
                             <th>Item</th>
@@ -80,10 +95,10 @@
                         <tr class = <?=$rowType?>>
                             <td><?=$food['foodName']?></td>
                             <td><?=$food['serving_size']?> <?=$food['measureName']?></td>
-                            <td><?=$food['calories']?></td>
-                            <td><?=$food['protein']?></td>
-                            <td><?=$food['carbs']?></td>
-                            <td><?=$food['fat']?></td>
+                            <td class="sum"><?=$food['calories']?></td>
+                            <td class="sum"><?=$food['protein']?></td>
+                            <td class="sum"><?=$food['carbs']?></td>
+                            <td class="sum"><?=$food['fat']?></td>
                         </tr>
 <?php
                         $row++;
@@ -91,6 +106,16 @@
                //}
 ?>
                     </tbody>
+                    <tfoot>
+                        <tr class="summary">
+                            <td>Totals</td>
+                            <td></td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                    </tfoot>
                 </table>
             </form>
 <?php

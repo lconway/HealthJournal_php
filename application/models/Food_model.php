@@ -45,6 +45,24 @@ class Food_model extends CI_Model
 		return $query->result_array();
 	}
 
+	public function get_daily_totals()
+	{
+		$date = new DateTime($this->session->userdata('journal_date'));
+		$date = $date->format('Y-m-d') . "%";
+		$query = $this->db->query( 
+			"select sum(foods.calories) as dailyCalories, 
+				sum(foods.protein) as dailyProtein, 
+				sum(foods.carbs) as dailyCarbs, 
+				sum(foods.fat) as dailyFat
+			from userMeals um
+			join itemsPerMeal ipm on ipm.userMeal_id = um.id
+			join foods on foods.id = ipm.food_id
+			where um.user_id = '{$this->session->userdata('user_id')}' 
+			and um.day_and_time  like '{$date}';" 
+		);
+		return $query->result_array();
+	}
+
 	public function get_foods_by_date($meal_id)
 	{
 		//$date = date('Y-m-d', time());

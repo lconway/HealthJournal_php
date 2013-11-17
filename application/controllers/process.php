@@ -9,7 +9,7 @@ class Process extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->output->enable_profiler(TRUE);
+		//$this->output->enable_profiler(TRUE);
 	}
 
 	public function index()
@@ -125,7 +125,19 @@ class Process extends CI_Controller {
 			//echo "userMealId = " . $userMealId . "  mealId = " . $mealId . "<br>";
 			$userMeals[$i]['myFoods'] =  $this->Food_model->get_foods_by_date($userMealId);
 		}
+		$dailyTotals =  $this->Food_model->get_daily_totals();
+		$viewData['dailyTotals'] =  $dailyTotals;
 		$viewData['userMeals'] = $userMeals;
+		// echo "In journal<br>";
+		// echo "<pre>";
+		// var_dump($dailyTotals);
+		// echo "</pre>";
+		foreach ($dailyTotals as $dailyTotal)
+		{
+			// echo "<br> meal is " . $dailyTotal['dailyCalories'] . "<br>";
+			// echo "<br> meal is " . $dailyTotal['dailyProtein'] . "<br>";
+		}
+
 		foreach ($userMeals as $userMeal)
 		{
 			//echo "<br> meal is " . $userMeal['name'] . "<br>";

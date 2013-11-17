@@ -29,9 +29,13 @@
         $('table.mealTable').each(function(){
             // var tableName = $(this).attr("id");
             // alert(tableName);
-            $(this).sumtr();
+            //alert("call sumtr1");
+            $(this).sumtr({
+                summaryRows : 'tr.mealSummary'
+            });
+            // var mealSum1 = $(this) tfoot.mealSum1.value();
+            // alert("mealSum1 is " + mealSum1);
         });
-
 
     });
     </script>
@@ -107,7 +111,7 @@
 ?>
                     </tbody>
                     <tfoot>
-                        <tr class="summary">
+                        <tr class="mealSummary">
                             <td>Totals</td>
                             <td></td>
                             <td>0</td>
@@ -121,6 +125,24 @@
 <?php
             }
  ?>
+            <table id="dailyTotals">
+                <thead>
+<?php
+                foreach($dailyTotals as $dailyTotal) {
+?>
+                    <tr>
+                        <th>Daily Totals</th>
+                        <th></th>
+                         <th><?=$dailyTotal['dailyCalories']?></th>
+                         <th><?=$dailyTotal['dailyProtein']?></th>
+                         <th><?=$dailyTotal['dailyCarbs']?></th>
+                         <th><?=$dailyTotal['dailyFat']?></th>
+                   </tr>
+<?php
+                }
+?>
+                </thead>
+            </table>
             </div>
         </div>
     </div>   <!-- end of wrapper-->

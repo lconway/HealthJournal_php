@@ -121,6 +121,10 @@
 	#journalLinks li {
 		display: inline;
 	}
+	#journalLinks li.add_border {
+		border-right: 1px solid blue;
+		padding-right: 4px;
+	}
 .mealForm {
 	margin-top: 15px;
 }

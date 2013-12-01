@@ -12,7 +12,10 @@ class User_model extends CI_Model
 			return FALSE;
 		} else
 		{
-			return $this->db->insert("users", $user);
+			//$this->db->insert("users", $user);
+			$query = $this->db->insert("users", $user);
+			$output = $this->db->insert_id();
+			return $output;
 		}
 
 	}

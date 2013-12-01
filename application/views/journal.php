@@ -46,9 +46,9 @@
         <div id="journalHeader">
             <h1 id="journalH1">Brooklynn's Food Journal</h1>
             <ul id="journalLinks">
-                <li><a href="journal">Journal</a></li>
-                <li><a href="create">Food Entry</a></li>
-                <li><a href="foods">Foods</a></li>
+                <li class="add_border"><a href="journal">Journal</a></li>
+                <li class="add_border"><a href="create">Food Entry</a></li>
+                <li class="add_border"><a href="foods">Foods</a></li>
                 <li><a href="logout">Logout</a></li>
             </ul>
         </div>
@@ -59,7 +59,7 @@
             <form id="dateForm" action="/process/set_date" method="post">
                 <button id="left_button" type="button"><</button>
                 <input id="journal_date" name="journal_date" class="datepicker" 
-                    type="text" value="<?=$this->session->userdata('journal_date')?>">
+                    type="text" value="<?=$journalDate?>">
                 <button id="right_button" type="button">></button>
                 <input type="submit" value="Show journal for date">
             </form>

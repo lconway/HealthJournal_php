@@ -7,6 +7,11 @@
     <script type="text/javascript" src="<?=base_url()?>/assets/jquery/jquery-1.10.2.js"></script>
     </script>
     <script type="text/javascript">
+        function msg()
+        {
+            var servings = prompt("Enter number of servings:");
+            alert("Add " + servings + " servings");
+        }
         $(document).ready(function(){
             $('#allFoodsSelect').change(function() {
                 //alert("Foods List selection");
@@ -29,6 +34,7 @@
                 $('.foodListButton').prop('disabled',true);
                 $('.myFoodListButton').prop('disabled',false);
             });
+
         });
     </script>
 </head>
@@ -82,7 +88,8 @@
                 </select>
                 </br>
                 </br>
-                <input type=submit class="myFoodListButton" disabled name="action" value="Add To Meal"><br>
+<!--                 <input type=submit class="myFoodListButton" onclick="myFunction()" disabled name="action" value="Add To Meal"><br> -->
+                <input type=button value="Add To Meal" onclick="msg()"></br>
                 <input type=submit class="myFoodListButton" disabled name="action" value="Delete From My Foods List">
                 <input type="hidden" name="userMealId" value="<?=$userMealId?>">
                <input type="hidden" name="listType" value="myFoods">

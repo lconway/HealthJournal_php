@@ -125,7 +125,6 @@ class Food_model extends CI_Model
 
 	public function set_userMeals()
 	{
-		//echo "In set_userMeals<br>";
 
 		$date = new DateTime($this->session->userdata('journal_date'));
 		$date = $date->format('Y-m-d');
@@ -261,6 +260,7 @@ class Food_model extends CI_Model
 			$data = array(
 				// Add user_id to itemsPerTable when there is more than 1 user
 				//'user_id' => $this->session->userdata('user_id'),
+
 				'food_id' => $foodId->id,
 				'userMeal_id' => $userMeal_id,
 				'created_at' => date('Y-m-d', time())

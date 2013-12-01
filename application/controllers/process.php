@@ -9,7 +9,7 @@ class Process extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		//$this->output->enable_profiler(TRUE);
+		$this->output->enable_profiler(TRUE);
 	}
 
 	public function index()
@@ -84,7 +84,9 @@ class Process extends CI_Controller {
 				'created_at' => $date
 			);
 			$this->load->model('User_model');
-			$user = $this->User_model->register_user($this->modelData['user']);
+			$user_id = $this->User_model->register_user($this->modelData['user']);
+			$this->session->set_userdata('user_id', $user_id);
+			//echo "user_id is " . $user_id;
 			redirect(base_url('/process/journal'));
 		}
 
@@ -110,6 +112,8 @@ class Process extends CI_Controller {
 			//echo "date is set to " . $this->session->userdata('journal_date');
 		}
 		//echo "<br>";
+		$date = new DateTime($this->session->userdata('journal_date'));
+		$date = $date->format('m/d/Y');
 
 
 		$this->load->model('Food_model');
@@ -126,6 +130,7 @@ class Process extends CI_Controller {
 			$userMeals[$i]['myFoods'] =  $this->Food_model->get_foods_by_date($userMealId);
 		}
 		$dailyTotals =  $this->Food_model->get_daily_totals();
+		$viewData['journalDate'] =  $date;
 		$viewData['dailyTotals'] =  $dailyTotals;
 		$viewData['userMeals'] = $userMeals;
 		// echo "In journal<br>";
